@@ -17,6 +17,25 @@ export const ALLOWED_ORIGINS = [
 ];
 
 // ============================================
+// File Upload Settings
+// ============================================
+
+// Busboy limits to guard against oversized uploads and excessive parts.
+export const BUSBOY_LIMITS = {
+  fileSize: 10 * 1024 * 1024, // 10MB max per file
+  files: 1, // only one file expected per request
+  parts: 2, // file + minimal extra fields
+  fields: 10, // allow a few text fields alongside the file
+};
+
+// Allow only common image MIME types for profile/word cards.
+export const ALLOWED_MIME_TYPES = new Set<string>([
+  'image/jpeg',
+  'image/png',
+  'image/webp',
+]);
+
+// ============================================
 // AI Analysis Prompts
 // ============================================
 
