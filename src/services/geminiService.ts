@@ -2,6 +2,7 @@ import { GoogleGenerativeAI } from '@google/generative-ai';
 import { GEMINI_CONFIG, WORD_GENERATION_PROMPT } from '../config/constants';
 import fs from 'fs';
 import path from 'path';
+import os from 'os';
 
 let genAI: GoogleGenerativeAI | null = null;
 
@@ -18,10 +19,14 @@ export interface Word {
   category: string;
 }
 
-// 캐시 디렉토리 설정
-const CACHE_DIR = path.join(process.cwd(), 'src', 'cache');
+// 캐시 디렉토리 설정 (서버리스 환경에서는 /tmp만 쓰기 가능)
+const CACHE_DIR = path.join(os.tmpdir(), 'brain-word-cache');
 if (!fs.existsSync(CACHE_DIR)) {
-  fs.mkdirSync(CACHE_DIR, { recursive: true });
+  try {
+    fs.mkdirSync(CACHE_DIR, { recursive: true });
+  } catch (err) {
+    console.warn('⚠️ Failed to create cache directory, caching will be disabled:', err);
+  }
 }
 
 /**
